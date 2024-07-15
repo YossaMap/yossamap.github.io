@@ -1,7 +1,7 @@
 const QRCode = require('qrcode');
 const fs = require('fs');
 
-const baseUrl = 'http://yossmap.github.io?qrid='; // Replace with your actual base URL
+const baseUrl = 'http://yossamap.github.io?qrid='; // Replace with your actual base URL
 
 const qrData = [];
 for (let i = 1; i <= 3; i++) {
