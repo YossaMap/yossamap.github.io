@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>QR Code Location</title>
+    <title>Yossa Books</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         #map {
@@ -11,8 +11,6 @@
     </style>
 </head>
 <body>
-    <h1>QR Code Location</h1>
-    <button onclick="scanQRCode('QR_CODE_TEST')">Scan QR Code and Record Location</button>
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
@@ -29,9 +27,9 @@
         }
 
         // Function to save location to local storage
-        function saveLocation(id, lat, lon) {
+        function saveLocation(lat, lon) {
             const locations = getLocations();
-            locations.push({ id: id, lat: lat, lon: lon });
+            locations.push({ lat: lat, lon: lon });
             localStorage.setItem('locations', JSON.stringify(locations));
         }
 
@@ -40,29 +38,34 @@
             const locations = getLocations();
             locations.forEach(location => {
                 L.marker([location.lat, location.lon]).addTo(map)
-                    .bindPopup(`QR Code: ${location.id}`)
+                    .bindPopup(`Location: (${location.lat}, ${location.lon})`)
                     .openPopup();
             });
         }
 
-        // Function to handle QR code scan
-        function scanQRCode(id) {
+        // Function to record and save the user's location
+        function recordLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(function(position) {
                     const lat = position.coords.latitude;
                     const lon = position.coords.longitude;
 
-                    saveLocation(id, lat, lon);
-                    alert('QR code scanned and location recorded!');
+                    saveLocation(lat, lon);
+                    alert('Location recorded!');
                     displayLocations();
+                }, function(error) {
+                    alert('Error getting location: ' + error.message);
                 });
             } else {
                 alert('Geolocation is not supported by this browser.');
             }
         }
 
-        // Display existing locations on the map
-        displayLocations();
+        // Record location and display existing locations on page load
+        window.onload = function() {
+            recordLocation();
+            displayLocations();
+        };
     </script>
 </body>
 </html>
